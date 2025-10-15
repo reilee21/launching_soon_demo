@@ -5,7 +5,7 @@ WORKDIR /app
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --no-scripts --no-progress --prefer-dist --optimize-autoloader
 
-# Stage 2: Build final image with PHP & Nginx
+# Stage 2: Final image with PHP-FPM + Nginx
 FROM php:8.3-fpm-alpine
 
 # Install system dependencies
@@ -21,11 +21,12 @@ RUN apk add --no-cache \
     libjpeg-turbo-dev \
     freetype-dev \
     oniguruma-dev \
-    libxml2-dev
+    libxml2-dev \
+    postgresql-dev
 
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
+    && docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd
 
 # Set working directory
 WORKDIR /var/www/html
@@ -43,8 +44,8 @@ COPY ./docker/supervisord.conf /etc/supervisord.conf
 # Permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Expose port 8080 (Render uses 10000 internally)
+# Expose port
 EXPOSE 8080
 
-# Start both Nginx and PHP-FPM via Supervisor
+# Start Supervisor to run PHP-FPM + Nginx
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
