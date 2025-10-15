@@ -26,7 +26,8 @@ class LogsController extends Controller
             return response()->json($recentLogs);
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'Failed to fetch recent logs'
+                'error' => 'Failed to fetch recent logs',
+                '_e' => $e->getMessage(),
             ], 500);
         }
     }
@@ -69,7 +70,8 @@ class LogsController extends Controller
 
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'Failed to fetch logs'
+                'error' => 'Failed to fetch logs',
+                '_e' => $e->getMessage(),
             ], 500);
         }
     }

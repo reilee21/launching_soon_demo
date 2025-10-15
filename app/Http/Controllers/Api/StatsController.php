@@ -47,7 +47,8 @@ class StatsController extends Controller
 
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'Failed to fetch statistics'
+                'error' => 'Failed to fetch statistics',
+                '_e' => $e->getMessage(),
             ], 500);
         }
     }
@@ -91,6 +92,7 @@ class StatsController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'Failed to fetch trend data'
+                '_e' => $e->getMessage(),
             ], 500);
         }
     }
