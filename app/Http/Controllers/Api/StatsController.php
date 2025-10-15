@@ -91,7 +91,7 @@ class StatsController extends Controller
 
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'Failed to fetch trend data'
+                'error' => 'Failed to fetch trend data',
                 '_e' => $e->getMessage(),
             ], 500);
         }
